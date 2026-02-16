@@ -1,0 +1,16 @@
+---
+- name: Install Prometheus
+  hosts: prometheus
+  become: yes
+  
+  roles:
+    - role: common
+      tags: [common]
+    
+    - role: prometheus
+      tags: [prometheus]
+    
+    - role: node_exporter
+      tags: [monitoring, node_exporter]
+      vars:
+        node_exporter_version: "1.6.1"

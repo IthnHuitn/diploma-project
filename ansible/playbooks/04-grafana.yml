@@ -1,0 +1,16 @@
+---
+- name: Install Grafana
+  hosts: grafana
+  become: yes
+  
+  roles:
+    - role: common
+      tags: [common]
+    
+    - role: grafana
+      tags: [grafana]
+    
+    - role: node_exporter
+      tags: [monitoring, node_exporter]
+      vars:
+        node_exporter_version: "1.6.1"

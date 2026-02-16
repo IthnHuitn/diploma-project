@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node'
+    static_configs:
+      - targets:
+        - '10.0.10.10:9100'  # web1
+        - '10.0.20.10:9100'  # web2
+        - '10.0.10.20:9100'  # prometheus
+        - '10.0.10.30:9100'  # elasticsearch
+        - '10.0.1.20:9100'   # grafana
+        - '10.0.1.30:9100'   # kibana

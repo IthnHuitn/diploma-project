@@ -1,0 +1,84 @@
+---
+- name: Create nginx_log_exporter user
+  user:
+    name: nginx_log_exporter
+    system: yes
+    shell: /usr/sbin/nologin
+  tags: [nginx_log_exporter]
+
+- name: Download Nginx Log Exporter
+  get_url:
+    url: "https://github.com/martin-helmich/prometheus-nginxlog-exporter/releases/download/v1.11.0/prometheus-nginxlog-exporter_1.11.0_linux_amd64.deb"
+    dest: "/tmp/prometheus-nginxlog-exporter.deb"
+    mode: '0644'
+  register: download_deb
+  tags: [nginx_log_exporter]
+
+- name: Install Nginx Log Exporter from .deb
+  apt:
+    deb: "/tmp/prometheus-nginxlog-exporter.deb"
+    state: present
+    update_cache: yes
+  when: download_deb is succeeded
+
+- name: Create config directory
+  file:
+    path: /etc/nginx-log-exporter
+    state: directory
+    mode: '0755'
+  tags: [nginx_log_exporter]
+
+- name: Configure Nginx Log Exporter
+  copy:
+    content: |
+      listen {
+        port = 4040
+        address = "0.0.0.0"
+      }
+      
+      namespace "nginx" {
+        source {
+          files = [
+            "/var/log/nginx/access.log"
+          ]
+        }
+        format = "$remote_addr - $remote_user [$time_local] \"$request\" $status $body_bytes_sent \"$http_referer\" \"$http_user_agent\""
+      }
+    dest: /etc/nginx-log-exporter/config.hcl
+    mode: '0644'
+  tags: [nginx_log_exporter]
+
+- name: Create systemd service
+  copy:
+    content: |
+      [Unit]
+      Description=Prometheus Nginx Log Exporter
+      After=network.target nginx.service
+      Requires=nginx.service
+
+      [Service]
+      User=nginx_log_exporter
+      Group=nginx_log_exporter
+      Type=simple
+      ExecStart=/usr/bin/prometheus-nginxlog-exporter -config-file /etc/nginx-log-exporter/config.hcl
+      Restart=always
+      RestartSec=10
+      StandardOutput=journal
+      StandardError=journal
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/nginx-log-exporter.service
+    mode: '0644'
+  tags: [nginx_log_exporter]
+
+- name: Reload systemd daemon
+  systemd:
+    daemon_reload: yes
+
+- name: Start Nginx Log Exporter
+  systemd:
+    name: nginx-log-exporter
+    state: started
+    enabled: yes
+  tags: [nginx_log_exporter]

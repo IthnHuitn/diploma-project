@@ -1,0 +1,35 @@
+---
+- name: Download Elasticsearch 7.17.29 .deb from Yandex mirror
+  get_url:
+    url: "https://mirror.yandex.ru/mirrors/elastic/7/pool/main/e/elasticsearch/elasticsearch-7.17.29-amd64.deb"
+    dest: /tmp/elasticsearch-7.17.29-amd64.deb
+    mode: '0644'
+    validate_certs: yes
+  tags: [elasticsearch]
+
+- name: Install Elasticsearch from .deb package
+  apt:
+    deb: /tmp/elasticsearch-7.17.29-amd64.deb
+    state: present
+  tags: [elasticsearch]
+
+- name: Remove downloaded .deb package
+  file:
+    path: /tmp/elasticsearch-7.17.29-amd64.deb
+    state: absent
+  tags: [elasticsearch]
+
+- name: Configure Elasticsearch
+  template:
+    src: elasticsearch.yml.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+  notify: restart elasticsearch
+  tags: [elasticsearch]
+
+- name: Start and enable Elasticsearch
+  systemd:
+    name: elasticsearch
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  tags: [elasticsearch]

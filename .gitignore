@@ -1,0 +1,41 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+terraform.tfvars
+terraform.tfvars.json
+crash.log
+override.tf
+override.tf.json
+.terraform.lock.hcl
+
+# Ansible
+*.retry
+ansible/inventory.ini
+ansible/inventory/*.ini
+ansible/group_vars/all/vars.yml
+ansible/roles/**/files/*.key
+ansible/roles/**/files/*.pem
+
+# SSH keys
+*.pem
+*.key
+id_rsa*
+*.pub
+
+# OS files
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

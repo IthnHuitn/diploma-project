@@ -1,0 +1,5 @@
+---
+nginx_log_exporter_version: "1.11.0"
+nginx_log_exporter_port: 4040
+nginx_log_exporter_user: "nginx_log_exporter"
+nginx_log_exporter_group: "nginx_log_exporter"

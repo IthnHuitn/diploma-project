@@ -1,0 +1,7 @@
+cluster.name: "{{ elasticsearch_cluster_name | default('my-application') }}"
+node.name: "{{ ansible_hostname }}"
+path.data: /var/lib/elasticsearch
+path.logs: /var/log/elasticsearch
+network.host: 0.0.0.0
+http.port: 9200
+discovery.type: single-node

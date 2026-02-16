@@ -1,0 +1,17 @@
+---
+# Общие версии пакетов
+common_packages:
+  - curl
+  - wget
+  - apt-transport-https
+  - ca-certificates
+  - gnupg
+  - software-properties-common
+  - unzip
+  - zip
+  - bzip2
+  - xz-utils
+  - zstd
+
+# Настройки времени
+apt_cache_valid_time: 3600

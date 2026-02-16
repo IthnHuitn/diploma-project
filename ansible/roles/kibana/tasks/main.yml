@@ -1,0 +1,35 @@
+---
+- name: Download Kibana 7.17.29 .deb from Yandex mirror
+  get_url:
+    url: "https://mirror.yandex.ru/mirrors/elastic/7/pool/main/k/kibana/kibana-7.17.29-amd64.deb"
+    dest: /tmp/kibana-7.17.29-amd64.deb
+    mode: '0644'
+    validate_certs: yes
+  tags: [kibana]
+
+- name: Install Kibana from .deb package
+  apt:
+    deb: /tmp/kibana-7.17.29-amd64.deb
+    state: present
+  tags: [kibana]
+
+- name: Remove downloaded .deb package
+  file:
+    path: /tmp/kibana-7.17.29-amd64.deb
+    state: absent
+  tags: [kibana]
+
+- name: Configure Kibana
+  template:
+    src: kibana.yml.j2
+    dest: /etc/kibana/kibana.yml
+  notify: restart kibana
+  tags: [kibana]
+
+- name: Start and enable Kibana
+  systemd:
+    name: kibana
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  tags: [kibana]

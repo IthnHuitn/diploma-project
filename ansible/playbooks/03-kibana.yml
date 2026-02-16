@@ -1,0 +1,16 @@
+---
+- name: Install Kibana
+  hosts: kibana
+  become: yes
+  
+  roles:
+    - role: common
+      tags: [common]
+    
+    - role: kibana
+      tags: [kibana]
+    
+    - role: node_exporter
+      tags: [monitoring, node_exporter]
+      vars:
+        node_exporter_version: "1.6.1"

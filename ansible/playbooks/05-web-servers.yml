@@ -1,0 +1,28 @@
+---
+- name: Configure web servers
+  hosts: web
+  become: yes
+  serial: 1  
+  
+  roles:
+    - role: common
+      tags: [common]
+    
+    - role: nginx
+      tags: [nginx]
+    
+    - role: node_exporter
+      tags: [monitoring, node_exporter]
+      vars:
+        node_exporter_version: "1.6.1"
+    
+    - role: nginx_log_exporter
+      tags: [monitoring, nginx_log_exporter]
+      vars:
+        nginx_log_exporter_version: "1.11.0"
+    
+    - role: filebeat
+      tags: [logging, filebeat]
+      vars:
+        filebeat_version: "7.17.13"
+        elasticsearch_hosts: ["10.0.10.30:9200"]

@@ -1,0 +1,17 @@
+---
+# Elastic Stack version
+elastic_stack_version: "7.17.29"
+
+# Yandex Mirror URLs
+yandex_mirror_base: "https://mirror.yandex.ru/mirrors/elastic/7/pool/main"
+elastic_deb_url: "{{ yandex_mirror_base }}/e/elasticsearch/elasticsearch-{{ elastic_stack_version }}-amd64.deb"
+kibana_deb_url: "{{ yandex_mirror_base }}/k/kibana/kibana-{{ elastic_stack_version }}-amd64.deb"
+filebeat_deb_url: "{{ yandex_mirror_base }}/f/filebeat/filebeat-{{ elastic_stack_version }}-amd64.deb"
+
+# GPG key
+elastic_gpg_key_url: "https://mirror.yandex.ru/mirrors/elastic/7/dists/stable/Release.gpg"
+
+# Host settings - используем IP адреса из вашего инвентори
+elasticsearch_host: "10.0.10.30:9200"
+kibana_host: "10.0.1.30:5601"
+grafana_host: "51.250.7.12:3000"

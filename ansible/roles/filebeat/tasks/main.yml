@@ -1,0 +1,70 @@
+---
+- name: Download Filebeat 7.17.29 .deb from Yandex mirror
+  get_url:
+    url: "https://mirror.yandex.ru/mirrors/elastic/7/pool/main/f/filebeat/filebeat-7.17.29-amd64.deb"
+    dest: /tmp/filebeat-7.17.29-amd64.deb
+    mode: '0644'
+    validate_certs: yes
+  tags: [filebeat]
+
+- name: Install Filebeat from .deb package
+  apt:
+    deb: /tmp/filebeat-7.17.29-amd64.deb
+    state: present
+  tags: [filebeat]
+
+- name: Remove downloaded .deb package
+  file:
+    path: /tmp/filebeat-7.17.29-amd64.deb
+    state: absent
+  tags: [filebeat]
+
+- name: Configure Filebeat
+  template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+  notify: restart filebeat
+  tags: [filebeat]
+
+- name: Enable nginx module
+  command:
+    cmd: filebeat modules enable nginx
+    creates: /etc/filebeat/modules.d/nginx.yml
+  tags: [filebeat]
+
+- name: Configure nginx module
+  copy:
+    content: |
+      - module: nginx
+        access:
+          enabled: true
+          var.paths: ["/var/log/nginx/access.log*"]
+        error:
+          enabled: true
+          var.paths: ["/var/log/nginx/error.log*"]
+    dest: /etc/filebeat/modules.d/nginx.yml
+  notify: restart filebeat
+  tags: [filebeat]
+
+- name: Setup Filebeat
+  command: filebeat setup
+  register: filebeat_setup
+  changed_when: "'Index setup finished' in filebeat_setup.stdout"
+  environment:
+    ELASTICSEARCH_HOST: "http://10.0.10.30:9200"
+    KIBANA_HOST: "http://10.0.1.30:5601"
+  tags: [filebeat]
+
+- name: Start and enable Filebeat
+  systemd:
+    name: filebeat
+    state: started
+    enabled: yes
+  tags: [filebeat]
+
+- name: Ensure Filebeat is running
+  systemd:
+    name: filebeat
+    state: restarted
+  when: filebeat_setup.changed
+  tags: [filebeat]
