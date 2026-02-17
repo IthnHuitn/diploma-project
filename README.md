@@ -49,11 +49,11 @@
 │  └─────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
 ```
-![diploma-network1](https://github.com/IthnHuitn/diploma-project/blob/main/screens/diploma-network1.jpg)`
-![diploma-network2](https://github.com/IthnHuitn/diploma-project/blob/main/screens/diploma-network2.jpg)`
-![diploma-network3](https://github.com/IthnHuitn/diploma-project/blob/main/screens/diploma-network3.jpg)`
-![diploma-network4](https://github.com/IthnHuitn/diploma-project/blob/main/screens/diploma-network4.jpg)`
-![loadbalancer](https://github.com/IthnHuitn/diploma-project/blob/main/screens/loadbalancer.jpg)`
+![diploma-network1](https://github.com/IthnHuitn/diploma-project/blob/main/screens/diploma-network1.jpg)
+![diploma-network2](https://github.com/IthnHuitn/diploma-project/blob/main/screens/diploma-network2.jpg)
+![diploma-network3](https://github.com/IthnHuitn/diploma-project/blob/main/screens/diploma-network3.jpg)
+![diploma-network4](https://github.com/IthnHuitn/diploma-project/blob/main/screens/diploma-network4.jpg)
+![loadbalancer](https://github.com/IthnHuitn/diploma-project/blob/main/screens/loadbalancer.jpg)
 
 ## 1.2 Компоненты инфраструктуры
 
@@ -68,7 +68,7 @@ Grafana	Визуализация	10.0.1.20 (pub: 51.250.7.12)	HTTP:3000
 Elasticsearch	Хранение логов	10.0.10.30	Через bastion
 Kibana	Просмотр логов	10.0.1.30 (pub: 93.77.189.209)	HTTP:5601
 ```
-![VM](https://github.com/IthnHuitn/diploma-project/blob/main/screens/VM.jpg)`
+![VM](https://github.com/IthnHuitn/diploma-project/blob/main/screens/VM.jpg)
 
 ## 2.1 Terraform код
 
@@ -905,38 +905,43 @@ URL: http://51.250.7.12:3000
 Login: admin
 Password: admin
 ```
-![Grafana_Inet](https://github.com/IthnHuitn/diploma-project/blob/main/screens/Grafana_Inet.jpg)`
+![Grafana_Inet](https://github.com/IthnHuitn/diploma-project/blob/main/screens/Grafana_Inet.jpg)
 
 ### Kibana
 
 ```text
 URL: http://93.77.189.209:5601
 ```
-![Kibana_Inet](https://github.com/IthnHuitn/diploma-project/blob/main/screens/Kibana_Inet.jpg)`
+![Kibana_Inet](https://github.com/IthnHuitn/diploma-project/blob/main/screens/Kibana_Inet.jpg)
 
 ## 3.2 Проверка работы компонентов
 
 ```bash
 yc application-load-balancer target-group get ds7nf5lis2n96kjus6nu
 ```
-![Balancer_Nods](https://github.com/IthnHuitn/diploma-project/blob/main/screens/Balancer_Nods.jpg)`
+![Balancer_Nods](https://github.com/IthnHuitn/diploma-project/blob/main/screens/Balancer_Nods.jpg)
 
 ### Сбор метрик Prometheus
 
 ```bash
 curl -s -X GET "http://10.0.10.20:9090/api/v1/targets" | jq '.'
 ```
-![Prometeus_metrics](https://github.com/IthnHuitn/diploma-project/blob/main/screens/Prometeus_metrics.jpg)`
-![Prometeus_metrics2](https://github.com/IthnHuitn/diploma-project/blob/main/screens/Prometeus_metrics2.jpg)`
+![Prometeus_metrics](https://github.com/IthnHuitn/diploma-project/blob/main/screens/Prometeus_metrics.jpg)
+![Prometeus_metrics2](https://github.com/IthnHuitn/diploma-project/blob/main/screens/Prometeus_metrics2.jpg)
 
 ### Отправка логов в Elasticsearch
 
 ```bash
 curl -X GET "http://10.0.10.30:9200/_cat/indices?v"
 ```
-![Elastic_logs](https://github.com/IthnHuitn/diploma-project/blob/main/screens/Elastic_logs.jpg)`
+![Elastic_logs](https://github.com/IthnHuitn/diploma-project/blob/main/screens/Elastic_logs.jpg)
 
 ## 3.3 SSH доступ через bastion
+
+```bash
+# SSH config
+cat ~/.ssh/config
+```
 
 ```bash
 # Бастион хост
