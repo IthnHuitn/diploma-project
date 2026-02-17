@@ -88,7 +88,7 @@ variable "static_private_ips" {
   }
 }
 
-# SSH ключ (значение по умолчанию УДАЛЕНО - теперь только из terraform.tfvars)
+# SSH ключ из terraform.tfvars
 variable "ssh_key" {
   description = "SSH public key for instances"
   type        = string

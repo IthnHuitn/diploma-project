@@ -11,7 +11,7 @@ filebeat_deb_url: "{{ yandex_mirror_base }}/f/filebeat/filebeat-{{ elastic_stack
 # GPG key
 elastic_gpg_key_url: "https://mirror.yandex.ru/mirrors/elastic/7/dists/stable/Release.gpg"
 
-# Host settings - используем IP адреса из вашего инвентори
+# Host settings - используем IP адреса из инвентори
 elasticsearch_host: "10.0.10.30:9200"
 kibana_host: "10.0.1.30:5601"
-grafana_host: "51.250.7.12:3000"
+grafana_host: "93.77.188.191:3000"

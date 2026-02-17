@@ -66,5 +66,5 @@
     grafana_host: "{{ grafana_host }}"  # из all.yml
     grafana_admin_user: "{{ grafana_admin_user | default('admin') }}"
     grafana_admin_password: "{{ grafana_admin_password | default('admin') }}"
-    prometheus_ip: "10.0.10.20"  # добавим явно
+    prometheus_ip: "10.0.10.20"  
   tags: [grafana, dashboards]

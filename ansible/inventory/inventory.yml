@@ -9,7 +9,7 @@ all:
     bastion:
       hosts:
         bastion:
-          ansible_host: 93.77.190.81
+          ansible_host: 51.250.83.70
     
     web:
       hosts:
@@ -29,7 +29,7 @@ all:
           ansible_host: 10.0.1.20
           ansible_ssh_private_key_file: ~/.ssh/id_rsa_diploma
           ansible_user: ubuntu
-          grafana_public_ip: 51.250.7.12  # 👈 добавляем публичный IP
+          grafana_public_ip: 93.77.188.191 # добавляем публичный IP
           grafana_port: 3000
     
     elasticsearch:

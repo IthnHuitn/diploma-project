@@ -1,4 +1,4 @@
-# Security Group для Bastion хоста (уже работает!)
+# Security Group для Bastion хоста 
 resource "yandex_vpc_security_group" "bastion-sg" {
   name        = "bastion-security-group"
   description = "Security group for Bastion host with SSH access"
@@ -54,7 +54,7 @@ resource "yandex_vpc_security_group" "bastion-sg" {
   }
 }
 
-# Security Group для веб-серверов (ИСПРАВЛЕНО: добавлен /32)
+# Security Group для веб-серверов
 resource "yandex_vpc_security_group" "web-servers-sg" {
   name        = "web-servers-security-group"
   description = "Security group for web servers"
@@ -65,7 +65,7 @@ resource "yandex_vpc_security_group" "web-servers-sg" {
     protocol       = "TCP"
     description    = "HTTP from Load Balancer"
     port           = 80
-    v4_cidr_blocks = ["0.0.0.0/0"]  # Временное решение
+    v4_cidr_blocks = ["0.0.0.0/0"]  
   }
 
   # SSH только из Bastion по IP с /32
@@ -73,7 +73,7 @@ resource "yandex_vpc_security_group" "web-servers-sg" {
     protocol       = "TCP"
     description    = "SSH from Bastion"
     port           = 22
-    v4_cidr_blocks = ["${var.static_private_ips["bastion"]}/32"]  # ← /32 добавлен
+    v4_cidr_blocks = ["${var.static_private_ips["bastion"]}/32"] 
   }
 
   # Node Exporter для мониторинга по IP с /32
@@ -81,7 +81,7 @@ resource "yandex_vpc_security_group" "web-servers-sg" {
     protocol       = "TCP"
     description    = "Node Exporter from Prometheus"
     port           = 9100
-    v4_cidr_blocks = ["${var.static_private_ips["prometheus"]}/32"]  # ← /32 добавлен
+    v4_cidr_blocks = ["${var.static_private_ips["prometheus"]}/32"] 
   }
 
   # Filebeat для логов по IP с /32
@@ -89,7 +89,7 @@ resource "yandex_vpc_security_group" "web-servers-sg" {
     protocol       = "TCP"
     description    = "Filebeat to Elasticsearch"
     port           = 9200
-    v4_cidr_blocks = ["${var.static_private_ips["elasticsearch"]}/32"]  # ← /32 добавлен
+    v4_cidr_blocks = ["${var.static_private_ips["elasticsearch"]}/32"]  
   }
 
   egress {
@@ -101,18 +101,18 @@ resource "yandex_vpc_security_group" "web-servers-sg" {
   }
 }
 
-# Security Group для балансировщика (ИСПРАВЛЕННЫЙ ВАРИАНТ)
+# Security Group для балансировщика 
 resource "yandex_vpc_security_group" "alb-healthcheck-sg" {
   name        = "alb-healthcheck-sg"
   description = "Security group for ALB health checks"
   network_id  = yandex_vpc_network.diploma-vpc.id
 
-  # 1. ОБЯЗАТЕЛЬНО: Разрешаем health checks от Yandex Cloud
+  # 1. Разрешаем health checks от Yandex Cloud
   ingress {
     protocol       = "TCP"
     description    = "Health checks from Yandex Cloud"
     port           = 80
-    v4_cidr_blocks = ["198.18.235.0/24", "198.18.248.0/24"]  # ← ОБЯЗАТЕЛЬНО
+    v4_cidr_blocks = ["198.18.235.0/24", "198.18.248.0/24"] 
   }
 
   # 2. Разрешаем health checks от балансировщика к веб-серверам
@@ -143,7 +143,7 @@ resource "yandex_vpc_security_group" "alb-healthcheck-sg" {
   }
 }
 
-# Security Group для Prometheus (ИСПРАВЛЕНО: добавлен /32)
+# Security Group для Prometheus 
 resource "yandex_vpc_security_group" "monitoring-sg" {
   name        = "monitoring-security-group"
   description = "Security group for monitoring services"
@@ -154,7 +154,7 @@ resource "yandex_vpc_security_group" "monitoring-sg" {
     protocol       = "TCP"
     description    = "SSH from Bastion"
     port           = 22
-    v4_cidr_blocks = ["${var.static_private_ips["bastion"]}/32"]  # ← /32 добавлен
+    v4_cidr_blocks = ["${var.static_private_ips["bastion"]}/32"]  
   }
 
   # Prometheus UI доступен только изнутри
@@ -165,7 +165,7 @@ resource "yandex_vpc_security_group" "monitoring-sg" {
     v4_cidr_blocks = ["10.0.0.0/8"]
   }
 
-  # Разрешаем сбор метрик с /32
+  # Разрешаем сбор метрик 
   egress {
     protocol       = "TCP"
     description    = "Metrics collection"
@@ -188,7 +188,7 @@ resource "yandex_vpc_security_group" "monitoring-sg" {
   }
 }
 
-# Security Group для Elasticsearch (ИСПРАВЛЕНО: добавлен /32)
+# Security Group для Elasticsearch 
 resource "yandex_vpc_security_group" "elasticsearch-sg" {
   name        = "elasticsearch-security-group"
   description = "Security group for Elasticsearch"
@@ -209,12 +209,12 @@ resource "yandex_vpc_security_group" "elasticsearch-sg" {
     v4_cidr_blocks = ["10.0.10.20/32"]  # IP Prometheus
   }
 
-  # SSH только из Bastion по IP с /32
+  # SSH только из Bastion по IP 
   ingress {
     protocol       = "TCP"
     description    = "SSH from Bastion"
     port           = 22
-    v4_cidr_blocks = ["${var.static_private_ips["bastion"]}/32"]  # ← /32 добавлен
+    v4_cidr_blocks = ["${var.static_private_ips["bastion"]}/32"]  
   }
 
   egress {
@@ -224,7 +224,7 @@ resource "yandex_vpc_security_group" "elasticsearch-sg" {
   }
 }
 
-# Security Group для Grafana (ИСПРАВЛЕНО: добавлен /32)
+# Security Group для Grafana 
 resource "yandex_vpc_security_group" "grafana-sg" {
   name        = "grafana-security-group"
   description = "Security group for Grafana"
@@ -238,12 +238,12 @@ resource "yandex_vpc_security_group" "grafana-sg" {
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # SSH только из Bastion по IP с /32
+  # SSH только из Bastion по IP 
   ingress {
     protocol       = "TCP"
     description    = "SSH from Bastion"
     port           = 22
-    v4_cidr_blocks = ["${var.static_private_ips["bastion"]}/32"]  # ← /32 добавлен
+    v4_cidr_blocks = ["${var.static_private_ips["bastion"]}/32"] 
   }
 
   ####
@@ -251,15 +251,15 @@ resource "yandex_vpc_security_group" "grafana-sg" {
     protocol       = "TCP"
     description    = "Node Exporter from Prometheus"
     port           = 9100
-    v4_cidr_blocks = ["${var.static_private_ips["prometheus"]}/32"]  # 10.0.10.20/32
+    v4_cidr_blocks = ["${var.static_private_ips["prometheus"]}/32"] 
   }
 
-  # Исходящий доступ к Prometheus по IP с /32
+  # Исходящий доступ к Prometheus по IP 
   egress {
     protocol       = "TCP"
     description    = "Access to Prometheus"
     port           = 9090
-    v4_cidr_blocks = ["${var.static_private_ips["prometheus"]}/32"]  # ← /32 добавлен
+    v4_cidr_blocks = ["${var.static_private_ips["prometheus"]}/32"] 
   }
 
   egress {
@@ -269,7 +269,7 @@ resource "yandex_vpc_security_group" "grafana-sg" {
   }
 }
 
-# Security Group для Kibana (ИСПРАВЛЕНО: добавлен /32)
+# Security Group для Kibana 
 resource "yandex_vpc_security_group" "kibana-sg" {
   name        = "kibana-security-group"
   description = "Security group for Kibana"
@@ -291,20 +291,20 @@ resource "yandex_vpc_security_group" "kibana-sg" {
     v4_cidr_blocks = ["${var.static_private_ips["prometheus"]}/32"]  # 10.0.10.20/32
   }
  
-  # SSH только из Bastion по IP с /32
+  # SSH только из Bastion по IP 
   ingress {
     protocol       = "TCP"
     description    = "SSH from Bastion"
     port           = 22
-    v4_cidr_blocks = ["${var.static_private_ips["bastion"]}/32"]  # ← /32 добавлен
+    v4_cidr_blocks = ["${var.static_private_ips["bastion"]}/32"] 
   }
 
-  # Исходящий доступ к Elasticsearch по IP с /32
+  # Исходящий доступ к Elasticsearch по IP 
   egress {
     protocol       = "TCP"
     description    = "Access to Elasticsearch"
     port           = 9200
-    v4_cidr_blocks = ["${var.static_private_ips["elasticsearch"]}/32"]  # ← /32 добавлен
+    v4_cidr_blocks = ["${var.static_private_ips["elasticsearch"]}/32"] 
   }
 
   egress {
