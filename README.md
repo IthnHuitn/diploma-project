@@ -1006,6 +1006,11 @@ Host elasticsearch
     UserKnownHostsFile /dev/null
 ```
 
+## 3.4 BackUp
+
+![BackUp1](https://github.com/IthnHuitn/diploma-project/blob/main/screens/backup1.jpg)
+![BackUp2](https://github.com/IthnHuitn/diploma-project/blob/main/screens/backup2.jpg)
+
 ## 4. Безопасность
 
 ### Принципы реализации
