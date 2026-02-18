@@ -1008,8 +1008,8 @@ Host elasticsearch
 
 ## 3.4 BackUp
 
-![BackUp1](https://github.com/IthnHuitn/diploma-project/blob/main/screens/backup1.jpg)
-![BackUp2](https://github.com/IthnHuitn/diploma-project/blob/main/screens/backup2.jpg)
+![BackUp1](https://github.com/IthnHuitn/diploma-project/blob/main/screens/backup1.png)
+![BackUp2](https://github.com/IthnHuitn/diploma-project/blob/main/screens/backup2.png)
 
 ## 4. Безопасность
 
