@@ -1,7 +1,7 @@
 ---
 - name: Wait for Grafana to be ready
   uri:
-    url: "http://93.77.188.191:3000/api/health"
+    url: "http://93.77.182.145:3000/api/health"
     method: GET
     status_code: 200
   register: grafana_health
@@ -15,7 +15,7 @@
 
 - name: Create Grafana Service Account
   uri:
-    url: "http://93.77.188.191:3000/api/serviceaccounts"
+    url: "http://93.77.182.145:3000/api/serviceaccounts"
     method: POST
     user: admin
     password: admin
@@ -33,7 +33,7 @@
 
 - name: Create Grafana Service Account Token
   uri:
-    url: "http://93.77.188.191:3000/api/serviceaccounts/{{ grafana_sa.json.id }}/tokens"
+    url: "http://93.77.182.145:3000/api/serviceaccounts/{{ grafana_sa.json.id }}/tokens"
     method: POST
     user: admin
     password: admin
@@ -50,7 +50,7 @@
 
 - name: Import Node Exporter dashboard
   community.grafana.grafana_dashboard:
-    grafana_url: "http://93.77.188.191:3000"
+    grafana_url: "http://93.77.182.145:3000"
     grafana_api_key: "{{ grafana_token.json.key }}"
     dashboard_id: 1860
     overwrite: yes
@@ -62,7 +62,7 @@
 
 - name: Import Nginx dashboard
   community.grafana.grafana_dashboard:
-    grafana_url: "http://93.77.188.191:3000"
+    grafana_url: "http://93.77.182.145:3000"
     grafana_api_key: "{{ grafana_token.json.key }}"
     dashboard_id: 12559
     overwrite: yes
@@ -74,7 +74,7 @@
 
 - name: Clean up - Delete Service Account Token
   uri:
-    url: "http://93.77.188.191:3000/api/serviceaccounts/{{ grafana_sa.json.id }}/tokens/{{ grafana_token.json.id }}"
+    url: "http://93.77.182.145:3000/api/serviceaccounts/{{ grafana_sa.json.id }}/tokens/{{ grafana_token.json.id }}"
     method: DELETE
     user: admin
     password: admin
@@ -88,7 +88,7 @@
 
 - name: Clean up - Delete Service Account
   uri:
-    url: "http://93.77.188.191:3000/api/serviceaccounts/{{ grafana_sa.json.id }}"
+    url: "http://93.77.182.145:3000/api/serviceaccounts/{{ grafana_sa.json.id }}"
     method: DELETE
     user: admin
     password: admin
@@ -104,7 +104,7 @@
 
 - name: Create Prometheus data source
   uri:
-    url: "http://93.77.188.191:3000/api/datasources"
+    url: "http://93.77.182.145:3000/api/datasources"
     method: POST
     user: admin
     password: admin
@@ -126,7 +126,7 @@
 
 - name: Get Prometheus datasource UID (after creation)
   uri:
-    url: "http://93.77.188.191:3000/api/datasources/name/Prometheus"
+    url: "http://93.77.182.145:3000/api/datasources/name/Prometheus"
     method: GET
     user: admin
     password: admin
@@ -142,7 +142,7 @@
   
 - name: Get Prometheus datasource UID
   uri:
-    url: "http://93.77.188.191:3000/api/datasources/name/Prometheus"
+    url: "http://93.77.182.145:3000/api/datasources/name/Prometheus"
     user: admin
     password: admin
     force_basic_auth: yes
@@ -155,14 +155,14 @@
 
 - name: Update Node Exporter dashboard datasource
   uri:
-    url: "http://93.77.188.191:3000/api/dashboards/uid/{{ item.uid }}"
+    url: "http://93.77.182.145:3000/api/dashboards/uid/{{ item.uid }}"
     method: GET
     user: admin
     password: admin
     force_basic_auth: yes
     status_code: 200
   register: dashboard_json
-  loop: "{{ (lookup('url', 'http://93.77.188.191:3000/api/search?query=Node%20Exporter', user='admin', password='admin', force_basic_auth=True) | from_json) }}"
+  loop: "{{ (lookup('url', 'http://93.77.182.145:3000/api/search?query=Node%20Exporter', user='admin', password='admin', force_basic_auth=True) | from_json) }}"
   when: item.title | regex_search('Node Exporter')
   delegate_to: localhost
   run_once: yes
@@ -171,7 +171,7 @@
 
 - name: Update dashboard with correct datasource
   uri:
-    url: "http://93.77.188.191:3000/api/dashboards/db"
+    url: "http://93.77.182.145:3000/api/dashboards/db"
     method: POST
     user: admin
     password: admin
